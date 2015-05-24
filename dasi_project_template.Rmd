@@ -1,0 +1,78 @@
+---
+title: "Data Analysis Project"
+date: "20 April 2015"
+output:
+  html_document:
+    theme: cerulean
+---
+
+<!-- For more info on RMarkdown see http://rmarkdown.rstudio.com/ -->
+
+<!-- Enter the code required to load your data in the space below. The data will be loaded but the line of code won't show up in your write up (echo=FALSE) in order to save space-->
+```{r echo=FALSE}
+load(url("http://bit.ly/dasi_gss_data"))
+```
+
+<!-- In the remainder of the document, add R code chunks as needed -->
+
+### Introduction:
+
+The day-to-day functioning of banks are highly dependent on its customer base. Large or frequent withdrawals on the part of depositors hamper the smooth running of their businesses. In order to mitigate withdrawals, it is vital for banks to portray itself as financially stable institutions in which depositors could entrust their funds to. However, there is a limit as to how perception of banks could be managed. In fact, there could be other factors at play that affects consumer confidence in banks. One possible factor that could affect consumer confidence in banks is the level of education that the consumer receives. In this study, the level of education will be operationalized as the highest degree completed. Therefore, this study aims to clarify whether does a relationship exist between highest degree completed and confidence in banks & financial institutions.
+
+The results obtained from such an exploratory study could be used to inform bank policies and practices. Its ramifications could be wide-ranging. For example, being able to identify the degree of confidence in banks by education level could aid bank staff to manage their cash flows better. The proper management of cash reserves at the macro level could stream down and impact consumers at the individual level. 
+
+### Data:
+The data that was used in the study is extracted from the General Social Survey (GSS). The GSS was conducted by researchers from the National Opinion Research Center at the University of Chicago. Respondents were randomly selected from the general American population and face-to-face interviews were conducted.
+
+Since this study aims to clarify whether does a relationship exist between highest degree completed and confidence in banks & financial institutions, only these two variables were extracted for subsequent analyses. Following extraction of these variables, NAs present in the data were removed.
+```{r}
+dataset <- gss[ , c(12, 48)]
+dataset <- na.omit(dataset)
+```
+
+Following extraction of the variables and removals of NAs, the dataset consists only of two variables: (a) Highest degree completed, which is an ordinal variable; and (b) Confidence in Banks & Financial Institutions, which is an ordinal variable as well. Each case in the dataset represented a single respondent's responses on these two variables. As these two variables are not experimentally manipulated under a controlled setting, but recorded in a face-to-face interview, this study is an observational study.
+
+The findings of the study are, to an extent, generalizable. The population of interest is the general American public. As the sample has been randomly drawn from the population of interest, the findings from the study could be generalized to the population as well. However, there could potentially be a non-response bias. Randomly selected participants who declined to participate could differ from participants who agreed to participate. Causal inference, however, could not be made as an observational design was adopted. In order to demonstrate causality, an experiment has to be set up to isolate the effect of the independent variable/s on the dependent variable.
+
+### Exploratory data analysis:
+
+The table function and the barplot function was used in the exploratory data analysis. Contingency tables were used as categorical data was involved. In a similar fashion, a barplot was used to graphically depict the relative proportions of categorical data.
+
+```{r}
+table(dataset$confinan, dataset$degree)
+prop.table(table(dataset$confinan, dataset$degree))
+barplot(prop.table(table(dataset$confinan, dataset$degree)), main = "Confidence in banks/financial institutes by Highest degree completed", xlab = "Highest Degree Completed", ylab = "Percentage", beside = TRUE, col = c("red", "green", "blue"), ylim = c(0, .30))
+legend("topright", c("A Great Deal of Confidece", "Only Some Confidence", "Hardly Any Confidence"), fill = c("red", "green", "blue"), title = "Degree of Confidence")
+```
+
+A cursory review of the data found in the contingency tables and the barplot seems to suggest that there is a relationship between highest degree completed and confidence in banks & financial institutions. Two contingency tables were presented; the first documented the counts, the second the percentage (the total percentage equals to 100). While both tables does show that there were more respondents who indicated that they "had a great deal of confidence" and "only some confidence" in the "left high school" and the "high school" groups than the other groups, the barplot is clearer in representing this same information. 
+
+### Inference:
+
+H0: There is no relationship between highest degree completed and confidence in banks & financial institutions.
+
+HA: There is a relationship between highest degree completed and confidence in banks & financial institutions.
+
+The chi-square test of independence was used to answer the research question as the variables of highest degree completed and confidence in banks & financial institutions were categorical in nature. This method of analysis was used to quantify the difference between the observed counts from the expected counts. Large deviations from what would be expected based on sampling variation (chance) along provides strong evidence for the alternative hypothesis. Chi-square testing was used as the other methods were not applicable in this case. Furthermore, hypothesis testing in this study does not require comparisons to be made between groups. Hence, confidence intervals were not included as part of the analyses.
+
+The chi-square test of independence has two conditions: (a) independence, and (b) sample size. The condition of independence has been met. The sampled  observations were independent of one another; each respondent did not affect the responses of other respondents. Furthermore, random sampling was used as part of the study's design. The sample size was also less than 10% of the population, and each case only contributed to one cell in the tables. The condition for sample size has also been met. As observed in the table, each cell has at least 5 cases.
+
+```{r}
+chisq.test(dataset$confinan, dataset$degree)
+```
+
+A chi-square test of independence was conducted to examine the relationship between highest degree completed and confidence in banks & financial institutions. The relationship between these variables were significant, X2(8, n = 57061) = 174.0776, p < 2.2e-16. Highest degree completed is related to confidence in banks & financial institutions, with respondents in the "left high school" and the "high school" groups possessing a greater degree of confidence in banks & financial institutes (as observed by the relatively higher percentages in the "a great deal of confidence" and "only some confidence" subgroups) than their "junior college", "bachelor", and "graduate" counterparts.
+
+### Conclusion:
+
+The cashflow of banks are readily affected by customer withdrawals at the individual level. This has ramifications for both the customer and the organization. At the organizational level, processes that have been put in place have to be adjusted if cash reserves dwindles beyond a certain threshold. Adjustments made may also not necessarily have the customers' best intentions in mind. Intuitively, withdrawals are made based on the customer confidence in banks & financial institutions. This study sought to examine how customer confidence could be affected by other factors such as customer education level. The results indicated that the greater the education that a person receives, the lesser their confidence in banks. Future studies could be conducted to explicitly solidify the link between bank withdrawals, customer confidence, and the level of education received.
+
+### References:
+
+Smith, Tom W., Michael Hout, and Peter V. Marsden. General Social Survey, 1972-2012 [Cumulative File]. ICPSR34802-v1. Storrs, CT: Roper Center for Public Opinion Research, University of Connecticut /Ann Arbor, MI: Inter-university Consortium for Political and Social Research [distributors], 2013-09-11. doi:10.3886/ICPSR34802.v1
+
+### Appendix:
+The following consists of 1 page of the dataset. As stated previously, NAs have already been removed from the dataset.
+```{r}
+head(dataset, 50)
+```
